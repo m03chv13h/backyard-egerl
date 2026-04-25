@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, type FormEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useConfirm } from '../components/useConfirm';
 import * as api from '../api/client';
 import type {
   EventPublic,
@@ -17,6 +18,7 @@ function RegistrationSection({
   eventId: number;
   isAdmin: boolean;
 }) {
+  const [confirm, confirmModal] = useConfirm();
   const [regs, setRegs] = useState<RegistrationRunnerPublic[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -53,7 +55,7 @@ function RegistrationSection({
   };
 
   const handleDelete = async (runnerId: number) => {
-    if (!confirm('Remove this registration?')) return;
+    if (!(await confirm('Remove this registration?'))) return;
     await api.deleteRegistration(eventId, runnerId);
     load();
   };
@@ -62,6 +64,7 @@ function RegistrationSection({
 
   return (
     <section>
+      {confirmModal}
       <div className="section-header">
         <h2>Registrations ({regs.length})</h2>
         {isAdmin && (
@@ -319,6 +322,7 @@ export default function EventDetailPage() {
   const eventId = Number(id);
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
+  const [confirmDelete, confirmDeleteModal] = useConfirm();
   const [event, setEvent] = useState<EventPublic | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<'registrations' | 'live' | 'timing'>(
@@ -333,7 +337,7 @@ export default function EventDetailPage() {
   }, [eventId]);
 
   const handleDelete = async () => {
-    if (!confirm(`Delete event "${event?.name}"?`)) return;
+    if (!(await confirmDelete(`Delete event "${event?.name}"?`))) return;
     await api.deleteEvent(eventId);
     navigate('/events');
   };
@@ -343,6 +347,7 @@ export default function EventDetailPage() {
 
   return (
     <div className="page">
+      {confirmDeleteModal}
       <div className="page-header">
         <div>
           <h1 className="neon-text">{event.name}</h1>
