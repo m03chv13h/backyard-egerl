@@ -81,8 +81,8 @@ export default function EventLiveDataPage() {
           <h1 className="neon-text">LIVE DATA</h1>
           <p className="meta">Event #{eventId}</p>
         </div>
-        <Link to={`/events/${eventId}`} className="btn btn-sm">
-          ← Event Details
+        <Link to="/events" className="btn btn-sm">
+          ← Overview
         </Link>
       </div>
 
