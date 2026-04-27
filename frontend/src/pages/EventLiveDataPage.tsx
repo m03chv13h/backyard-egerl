@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import * as api from '../api/client';
 import type { LiveTimingRow } from '../types/api';
+import { formatDuration, computeFastestSlowest } from '../utils/duration';
 
 const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
@@ -48,6 +49,11 @@ export default function EventLiveDataPage() {
     setRefreshing(true);
     fetchData();
   };
+
+  const { fastestMin, slowestMin } = useMemo(
+    () => computeFastestSlowest(rows),
+    [rows],
+  );
 
   if (loading) return <div className="page-loading">Loading live data…</div>;
 
@@ -116,9 +122,21 @@ export default function EventLiveDataPage() {
               <td className="rank">{r.rank}</td>
               <td>{r.name}</td>
               <td>{r.laps}</td>
-              <td className="mono">{r.last_laptime ?? '—'}</td>
-              <td className="mono">{r.avg_laptime ?? '—'}</td>
-              <td className="mono highlight">{r.min_laptime ?? '—'}</td>
+              <td className="mono">{formatDuration(r.last_laptime)}</td>
+              <td className="mono">{formatDuration(r.avg_laptime)}</td>
+              <td
+                className={`mono${
+                  r.min_laptime === null
+                    ? ''
+                    : r.name === fastestMin
+                    ? ' lap-fastest'
+                    : r.name === slowestMin
+                    ? ' lap-slowest'
+                    : ' highlight'
+                }`}
+              >
+                {formatDuration(r.min_laptime)}
+              </td>
               <td>
                 <span className={`status-badge status-${r.status.toLowerCase()}`}>
                   {r.status}

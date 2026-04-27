@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, type FormEvent } from 'react';
+import { useEffect, useState, useCallback, type FormEvent, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useConfirm } from '../components/useConfirm';
@@ -8,6 +8,7 @@ import type {
   RegistrationRunnerPublic,
   LiveTimingRow,
 } from '../types/api';
+import { formatDuration, computeFastestSlowest } from '../utils/duration';
 
 /* ── Sub-components ── */
 
@@ -170,6 +171,11 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
     };
   }, [eventId, polling]);
 
+  const { fastestMin, slowestMin } = useMemo(
+    () => computeFastestSlowest(rows),
+    [rows],
+  );
+
   return (
     <section>
       <div className="section-header">
@@ -207,9 +213,21 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
               <td className="rank">{r.rank}</td>
               <td>{r.name}</td>
               <td>{r.laps}</td>
-              <td className="mono">{r.last_laptime ?? '—'}</td>
-              <td className="mono">{r.avg_laptime ?? '—'}</td>
-              <td className="mono highlight">{r.min_laptime ?? '—'}</td>
+              <td className="mono">{formatDuration(r.last_laptime)}</td>
+              <td className="mono">{formatDuration(r.avg_laptime)}</td>
+              <td
+                className={`mono${
+                  r.min_laptime === null
+                    ? ''
+                    : r.name === fastestMin
+                    ? ' lap-fastest'
+                    : r.name === slowestMin
+                    ? ' lap-slowest'
+                    : ' highlight'
+                }`}
+              >
+                {formatDuration(r.min_laptime)}
+              </td>
               <td>
                 <span className={`status-badge status-${r.status.toLowerCase()}`}>
                   {r.status}

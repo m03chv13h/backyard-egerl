@@ -314,6 +314,12 @@ h2 { font-size: 1.1rem; font-family: var(--font-heading); color: var(--color-pri
 .muted { color: var(--color-muted); }
 .mono { font-family: var(--font-mono); }
 .highlight { color: var(--color-accent); }
+.lap-fastest {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-shadow: var(--glow-primary);
+}
+.lap-slowest { color: var(--color-danger); }
 
 .error-text {
   color: var(--color-danger);
