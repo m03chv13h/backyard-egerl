@@ -41,7 +41,7 @@ export default function App() {
               <Route
                 path="/events/:id"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute adminOnly>
                     <EventDetailPage />
                   </ProtectedRoute>
                 }
