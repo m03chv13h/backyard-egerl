@@ -36,7 +36,7 @@ export default function EventListPage() {
       ) : (
         <div className="card-grid">
           {events.map((ev) => (
-            <Link key={ev.id} to={`/events/${ev.id}`} className="event-card card">
+            <Link key={ev.id} to={`/events/${ev.id}/live_data`} className="event-card card">
               <h2>{ev.name}</h2>
               <p className="meta">
                 {new Date(ev.date).toLocaleDateString()} &middot; Lap:{' '}
