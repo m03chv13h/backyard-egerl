@@ -674,6 +674,88 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ══════════════════════════════════════════════════════
+   LAP TIME CHART
+   ══════════════════════════════════════════════════════ */
+.lap-charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1rem;
+}
+
+.lap-chart-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem 0.5rem;
+}
+
+.lap-chart-name {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lap-chart-svg {
+  width: 100%;
+  overflow: visible;
+}
+
+.lap-chart-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.lap-chart-axis {
+  stroke: var(--color-muted);
+  stroke-width: 1;
+}
+
+.lap-chart-axis-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--color-muted);
+}
+
+.lap-chart-avg {
+  stroke: var(--color-muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+}
+
+.lap-chart-avg-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: var(--color-muted);
+  dominant-baseline: middle;
+}
+
+.lap-chart-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.lap-chart-dot {
+  fill: var(--color-primary);
+  stroke: var(--bg-card);
+  stroke-width: 1.5;
+  cursor: default;
+}
+
+.lap-chart-dot.fastest {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 3px var(--color-accent));
+}
+
+/* ══════════════════════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {

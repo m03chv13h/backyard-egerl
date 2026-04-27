@@ -14,6 +14,7 @@ import {
   sumDurations,
   formatTotalDuration,
 } from '../utils/duration';
+import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
 
@@ -283,6 +284,18 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           )}
         </tbody>
       </table>
+      {rows.some((r) => r.all_laps.length >= 2) && (
+        <section>
+          <h2 style={{ marginBottom: '0.75rem' }}>Lap Time Charts</h2>
+          <div className="lap-charts-section">
+            {rows
+              .filter((r) => r.all_laps.length >= 2)
+              .map((r) => (
+                <LapTimeChart key={r.name} name={r.name} laps={r.all_laps} />
+              ))}
+          </div>
+        </section>
+      )}
     </section>
   );
 }
