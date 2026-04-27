@@ -184,13 +184,14 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
     [rows],
   );
 
-  const { totalKm, totalRuntime } = useMemo(() => {
+  const { totalKm, totalRuntime, activeRunners } = useMemo(() => {
     const km = rows.reduce((acc, r) => acc + r.laps * KM_PER_LAP, 0);
     const runtime = rows.reduce(
       (acc, r) => acc + sumDurations(r.all_laps),
       0,
     );
-    return { totalKm: km, totalRuntime: runtime };
+    const active = rows.filter((r) => r.status.toLowerCase() === 'running').length;
+    return { totalKm: km, totalRuntime: runtime, activeRunners: active };
   }, [rows]);
 
   return (
@@ -233,6 +234,12 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
             <span className="muted" style={{ fontSize: '0.8em' }}>Total Running Time</span>
             <div className="neon-text" style={{ fontSize: '1.2em', fontWeight: 700 }}>
               {formatTotalDuration(totalRuntime)}
+            </div>
+          </div>
+          <div>
+            <span className="muted" style={{ fontSize: '0.8em' }}>Active Runners</span>
+            <div className="neon-text" style={{ fontSize: '1.2em', fontWeight: 700 }}>
+              {activeRunners}
             </div>
           </div>
         </div>
