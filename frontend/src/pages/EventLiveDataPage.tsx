@@ -2,7 +2,14 @@ import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import * as api from '../api/client';
 import type { LiveTimingRow } from '../types/api';
-import { formatDuration, computeFastestSlowest } from '../utils/duration';
+import {
+  formatDuration,
+  computeFastestSlowest,
+  sumDurations,
+  formatTotalDuration,
+} from '../utils/duration';
+
+const KM_PER_LAP = 6.7;
 
 const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
@@ -55,6 +62,15 @@ export default function EventLiveDataPage() {
     [rows],
   );
 
+  const { totalKm, totalRuntime } = useMemo(() => {
+    const km = rows.reduce((acc, r) => acc + r.laps * KM_PER_LAP, 0);
+    const runtime = rows.reduce(
+      (acc, r) => acc + sumDurations(r.all_laps),
+      0,
+    );
+    return { totalKm: km, totalRuntime: runtime };
+  }, [rows]);
+
   if (loading) return <div className="page-loading">Loading live data…</div>;
 
   return (
@@ -104,12 +120,34 @@ export default function EventLiveDataPage() {
 
       {error && <p className="error-text">{error}</p>}
 
+      {rows.length > 0 && (
+        <div
+          className="card"
+          style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '1rem' }}
+        >
+          <div>
+            <span className="muted" style={{ fontSize: '0.8em' }}>Total KM</span>
+            <div className="neon-text" style={{ fontSize: '1.4em', fontWeight: 700 }}>
+              {totalKm.toFixed(1)} km
+            </div>
+          </div>
+          <div>
+            <span className="muted" style={{ fontSize: '0.8em' }}>Total Running Time</span>
+            <div className="neon-text" style={{ fontSize: '1.4em', fontWeight: 700 }}>
+              {formatTotalDuration(totalRuntime)}
+            </div>
+          </div>
+        </div>
+      )}
+
       <table className="data-table live-table">
         <thead>
           <tr>
             <th>#</th>
             <th>Name</th>
             <th>Laps</th>
+            <th>KM</th>
+            <th>Total Time</th>
             <th>Last Lap</th>
             <th>Avg Lap</th>
             <th>Best Lap</th>
@@ -122,6 +160,8 @@ export default function EventLiveDataPage() {
               <td className="rank">{r.rank}</td>
               <td>{r.name}</td>
               <td>{r.laps}</td>
+              <td className="mono">{(r.laps * KM_PER_LAP).toFixed(1)} km</td>
+              <td className="mono">{formatTotalDuration(sumDurations(r.all_laps))}</td>
               <td className="mono">{formatDuration(r.last_laptime)}</td>
               <td className="mono">{formatDuration(r.avg_laptime)}</td>
               <td
@@ -146,7 +186,7 @@ export default function EventLiveDataPage() {
           ))}
           {rows.length === 0 && (
             <tr>
-              <td colSpan={7} className="muted">
+              <td colSpan={9} className="muted">
                 No live data available.
               </td>
             </tr>

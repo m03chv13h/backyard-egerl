@@ -8,7 +8,14 @@ import type {
   RegistrationRunnerPublic,
   LiveTimingRow,
 } from '../types/api';
-import { formatDuration, computeFastestSlowest } from '../utils/duration';
+import {
+  formatDuration,
+  computeFastestSlowest,
+  sumDurations,
+  formatTotalDuration,
+} from '../utils/duration';
+
+const KM_PER_LAP = 6.7;
 
 /* ── Sub-components ── */
 
@@ -176,6 +183,15 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
     [rows],
   );
 
+  const { totalKm, totalRuntime } = useMemo(() => {
+    const km = rows.reduce((acc, r) => acc + r.laps * KM_PER_LAP, 0);
+    const runtime = rows.reduce(
+      (acc, r) => acc + sumDurations(r.all_laps),
+      0,
+    );
+    return { totalKm: km, totalRuntime: runtime };
+  }, [rows]);
+
   return (
     <section>
       <div className="section-header">
@@ -195,12 +211,33 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           </button>
         </div>
       </div>
+      {rows.length > 0 && (
+        <div
+          className="card"
+          style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '1rem' }}
+        >
+          <div>
+            <span className="muted" style={{ fontSize: '0.8em' }}>Total KM</span>
+            <div className="neon-text" style={{ fontSize: '1.2em', fontWeight: 700 }}>
+              {totalKm.toFixed(1)} km
+            </div>
+          </div>
+          <div>
+            <span className="muted" style={{ fontSize: '0.8em' }}>Total Running Time</span>
+            <div className="neon-text" style={{ fontSize: '1.2em', fontWeight: 700 }}>
+              {formatTotalDuration(totalRuntime)}
+            </div>
+          </div>
+        </div>
+      )}
       <table className="data-table live-table">
         <thead>
           <tr>
             <th>#</th>
             <th>Name</th>
             <th>Laps</th>
+            <th>KM</th>
+            <th>Total Time</th>
             <th>Last Lap</th>
             <th>Avg Lap</th>
             <th>Best Lap</th>
@@ -213,6 +250,8 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
               <td className="rank">{r.rank}</td>
               <td>{r.name}</td>
               <td>{r.laps}</td>
+              <td className="mono">{(r.laps * KM_PER_LAP).toFixed(1)} km</td>
+              <td className="mono">{formatTotalDuration(sumDurations(r.all_laps))}</td>
               <td className="mono">{formatDuration(r.last_laptime)}</td>
               <td className="mono">{formatDuration(r.avg_laptime)}</td>
               <td
@@ -237,7 +276,7 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           ))}
           {rows.length === 0 && (
             <tr>
-              <td colSpan={7} className="muted">
+              <td colSpan={9} className="muted">
                 {polling ? 'Waiting for data…' : 'Press Start to begin polling.'}
               </td>
             </tr>

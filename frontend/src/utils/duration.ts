@@ -46,6 +46,39 @@ export function formatDuration(iso: string | null): string {
 }
 
 /**
+ * Sum an array of ISO 8601 duration strings to total seconds.
+ * Strings that cannot be parsed are ignored.
+ */
+export function sumDurations(isos: string[]): number {
+  return isos.reduce((acc, iso) => {
+    const s = parseDuration(iso);
+    return acc + (isNaN(s) ? 0 : s);
+  }, 0);
+}
+
+/**
+ * Format a total number of seconds into a human-readable string that includes
+ * days when applicable.  Examples:
+ *   3661       → "1h 01m 01s"
+ *   90061      → "1d 1h 01m 01s"
+ *   75         → "1m 15s"
+ */
+export function formatTotalDuration(totalSeconds: number): string {
+  if (!isFinite(totalSeconds) || totalSeconds < 0) return '—';
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  const minStr = String(minutes).padStart(2, '0');
+  const secStr = String(seconds).padStart(2, '0');
+
+  if (days > 0) return `${days}d ${hours}h ${minStr}m ${secStr}s`;
+  if (hours > 0) return `${hours}h ${minStr}m ${secStr}s`;
+  return `${minutes}m ${secStr}s`;
+}
+
+/**
  * Given an array of rows with a `name` and `min_laptime` field, returns the
  * names of the runners with the fastest and slowest best lap times.
  */
