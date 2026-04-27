@@ -112,7 +112,7 @@ export default function EventLiveDataPage() {
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.rank}>
+            <tr key={r.name}>
               <td className="rank">{r.rank}</td>
               <td>{r.name}</td>
               <td>{r.laps}</td>
