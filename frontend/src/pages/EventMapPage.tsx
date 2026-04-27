@@ -299,7 +299,7 @@ export default function EventMapPage() {
 
           {/* Runner markers */}
           {runnerPositions.map(({ row, pos, idx }) => (
-            <Marker key={row.name} position={pos} icon={runnerIcon(idx)}>
+            <Marker key={idx} position={pos} icon={runnerIcon(idx)}>
               <Tooltip permanent direction="top" offset={[0, -10]}>
                 <span style={{ fontWeight: 700 }}>{row.name}</span>
                 <br />
@@ -322,7 +322,7 @@ export default function EventMapPage() {
             }}
           >
             {runnerPositions.map(({ row, idx }) => (
-              <span key={row.name} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <span key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <span
                   style={{
                     display: 'inline-block',
