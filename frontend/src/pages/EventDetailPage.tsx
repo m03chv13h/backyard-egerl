@@ -204,6 +204,12 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           >
             ⛶ Full Live View
           </Link>
+          <Link
+            to={`/events/${eventId}/map`}
+            className="btn btn-sm"
+          >
+            🗺️ Map
+          </Link>
           <button
             className={`btn btn-sm ${polling ? 'btn-danger' : 'btn-primary'}`}
             onClick={() => setPolling(!polling)}

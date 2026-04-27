@@ -81,9 +81,14 @@ export default function EventLiveDataPage() {
           <h1 className="neon-text">LIVE DATA</h1>
           <p className="meta">Event #{eventId}</p>
         </div>
-        <Link to="/events" className="btn btn-sm">
-          ← Overview
-        </Link>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Link to={`/events/${eventId}/map`} className="btn btn-sm">
+            🗺️ Map
+          </Link>
+          <Link to="/events" className="btn btn-sm">
+            ← Overview
+          </Link>
+        </div>
       </div>
 
       <div className="section-header" style={{ marginBottom: '1rem' }}>
