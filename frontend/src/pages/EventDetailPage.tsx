@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, type FormEvent } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useConfirm } from '../components/useConfirm';
 import * as api from '../api/client';
@@ -174,12 +174,20 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
     <section>
       <div className="section-header">
         <h2>Live Timing</h2>
-        <button
-          className={`btn btn-sm ${polling ? 'btn-danger' : 'btn-primary'}`}
-          onClick={() => setPolling(!polling)}
-        >
-          {polling ? '■ Stop' : '▶ Start'} Live
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <Link
+            to={`/events/${eventId}/live_data`}
+            className="btn btn-sm"
+          >
+            ⛶ Full Live View
+          </Link>
+          <button
+            className={`btn btn-sm ${polling ? 'btn-danger' : 'btn-primary'}`}
+            onClick={() => setPolling(!polling)}
+          >
+            {polling ? '■ Stop' : '▶ Start'} Live
+          </button>
+        </div>
       </div>
       <table className="data-table live-table">
         <thead>

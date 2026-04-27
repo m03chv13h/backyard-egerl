@@ -8,6 +8,7 @@ import EventListPage from './pages/EventListPage';
 import CreateEventPage from './pages/CreateEventPage';
 import EventDetailPage from './pages/EventDetailPage';
 import RunnerPage from './pages/RunnerPage';
+import EventLiveDataPage from './pages/EventLiveDataPage';
 import TagInfoPage from './pages/TagInfoPage';
 import ScannerStatusPage from './pages/ScannerStatusPage';
 import ForbiddenPage from './pages/ForbiddenPage';
@@ -42,6 +43,14 @@ export default function App() {
                 element={
                   <ProtectedRoute>
                     <EventDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/events/:id/live_data"
+                element={
+                  <ProtectedRoute>
+                    <EventLiveDataPage />
                   </ProtectedRoute>
                 }
               />
