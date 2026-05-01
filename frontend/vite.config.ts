@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const apiProxyTarget = 'http://localhost:8000';
+const apiProxyTarget = 'http://localhost:8787';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/backyard-egerl/',
+  base: '/',
   plugins: [react()],
   server: {
     proxy: {

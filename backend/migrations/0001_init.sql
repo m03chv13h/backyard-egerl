@@ -1,0 +1,56 @@
+-- Migration: Initial schema
+-- Database: D1 (SQLite)
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  usergroup INTEGER NOT NULL DEFAULT 4
+);
+
+CREATE TABLE IF NOT EXISTS events (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  date TEXT NOT NULL,
+  lap_duration TEXT NOT NULL,
+  min_lap_duration TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS runners (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS registrations (
+  event_id INTEGER NOT NULL,
+  runner_id INTEGER NOT NULL,
+  bib_nr INTEGER,
+  rfid_tag_id TEXT,
+  dnf_lap INTEGER,
+  start_lap INTEGER NOT NULL DEFAULT 1,
+  PRIMARY KEY (event_id, runner_id),
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  FOREIGN KEY (runner_id) REFERENCES runners(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS timings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  rfid_tag_id TEXT NOT NULL,
+  time TEXT NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS lap_timings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  rfid_tag_id TEXT NOT NULL,
+  lap INTEGER NOT NULL,
+  lap_time TEXT NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tag_info (
+  rfid_tag_id TEXT PRIMARY KEY,
+  time TEXT NOT NULL
+);

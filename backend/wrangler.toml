@@ -1,0 +1,9 @@
+name = "backyard-egerl-api"
+main = "src/index.ts"
+compatibility_date = "2024-12-05"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "backyard-egerl-db"
+database_id = "" # Set via Cloudflare dashboard or `wrangler d1 create backyard-egerl-db`
+migrations_dir = "migrations"
