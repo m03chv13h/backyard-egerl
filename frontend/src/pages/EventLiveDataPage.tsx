@@ -8,6 +8,7 @@ import {
   sumDurations,
   formatTotalDuration,
 } from '../utils/duration';
+import { displayName } from '../utils/displayName';
 import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
@@ -171,7 +172,7 @@ export default function EventLiveDataPage() {
           {rows.map((r) => (
             <tr key={r.name}>
               <td className="rank">{r.rank}</td>
-              <td>{r.name}</td>
+              <td>{displayName(r.name)}</td>
               <td>{r.laps}</td>
               <td className="mono">{(r.laps * KM_PER_LAP).toFixed(1)} km</td>
               <td className="mono">{formatTotalDuration(sumDurations(r.all_laps))}</td>
@@ -214,7 +215,7 @@ export default function EventLiveDataPage() {
             {rows
               .filter((r) => r.all_laps.length >= 2)
               .map((r) => (
-                <LapTimeChart key={r.name} name={r.name} laps={r.all_laps} />
+                <LapTimeChart key={r.name} name={displayName(r.name)} laps={r.all_laps} />
               ))}
           </div>
         </section>

@@ -14,6 +14,7 @@ import {
   sumDurations,
   formatTotalDuration,
 } from '../utils/duration';
+import { displayName } from '../utils/displayName';
 import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
@@ -127,7 +128,7 @@ function RegistrationSection({
           {regs.map((r) => (
             <tr key={r.runner_id}>
               <td>{r.bib_nr ?? '—'}</td>
-              <td>{r.runner.name}</td>
+              <td>{displayName(r.runner.name)}</td>
               <td className="mono">{r.rfid_tag_id ?? '—'}</td>
               <td>{r.start_lap}</td>
               <td>{r.dnf_lap ?? '—'}</td>
@@ -262,7 +263,7 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           {rows.map((r) => (
             <tr key={r.rank}>
               <td className="rank">{r.rank}</td>
-              <td>{r.name}</td>
+              <td>{displayName(r.name)}</td>
               <td>{r.laps}</td>
               <td className="mono">{(r.laps * KM_PER_LAP).toFixed(1)} km</td>
               <td className="mono">{formatTotalDuration(sumDurations(r.all_laps))}</td>
@@ -304,7 +305,7 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
             {rows
               .filter((r) => r.all_laps.length >= 2)
               .map((r) => (
-                <LapTimeChart key={r.name} name={r.name} laps={r.all_laps} />
+                <LapTimeChart key={r.name} name={displayName(r.name)} laps={r.all_laps} />
               ))}
           </div>
         </section>
