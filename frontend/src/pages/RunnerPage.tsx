@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import * as api from '../api/client';
 import type { RunnerPublic } from '../types/api';
+import { displayName } from '../utils/displayName';
 
 export default function RunnerPage() {
   const { runnerId } = useParams<{ runnerId: string }>();
@@ -30,7 +31,7 @@ export default function RunnerPage() {
             </tr>
             <tr>
               <td>Name</td>
-              <td>{runner.name}</td>
+              <td>{displayName(runner.name)}</td>
             </tr>
           </tbody>
         </table>

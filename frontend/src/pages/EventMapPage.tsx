@@ -13,6 +13,7 @@ import * as api from '../api/client';
 import type { LiveTimingRow } from '../types/api';
 import { ROUTE_POINTS, ROUTE_DURATION_S } from '../data/routeData';
 import { sumDurations } from '../utils/duration';
+import { displayName } from '../utils/displayName';
 
 /* ── helpers ── */
 
@@ -301,7 +302,7 @@ export default function EventMapPage() {
           {runnerPositions.map(({ row, pos, idx }) => (
             <Marker key={idx} position={pos} icon={runnerIcon(idx)}>
               <Tooltip permanent direction="top" offset={[0, -10]}>
-                <span style={{ fontWeight: 700 }}>{row.name}</span>
+                <span style={{ fontWeight: 700 }}>{displayName(row.name)}</span>
                 <br />
                 Lap {row.laps + 1}
               </Tooltip>
@@ -333,7 +334,7 @@ export default function EventMapPage() {
                     border: '1px solid #fff',
                   }}
                 />
-                {row.name} — Lap {row.laps + 1}
+                {displayName(row.name)} — Lap {row.laps + 1}
               </span>
             ))}
           </div>
