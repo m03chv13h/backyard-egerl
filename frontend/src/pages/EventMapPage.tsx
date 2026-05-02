@@ -14,6 +14,7 @@ import type { LiveTimingRow } from '../types/api';
 import { ROUTE_POINTS, ROUTE_DURATION_S } from '../data/routeData';
 import { sumDurations } from '../utils/duration';
 import { displayName } from '../utils/displayName';
+import { getCustomization } from '../utils/runnerCustomization';
 
 /* ── helpers ── */
 
@@ -72,7 +73,8 @@ function estimateRunnerPosition(
   row: LiveTimingRow,
   now: Date,
 ): [number, number] | null {
-  if (row.status.toUpperCase() === 'DNF') return null;
+  const status = getCustomization(row.name)?.statusOverride || row.status;
+  if (status.toUpperCase() === 'DNF') return null;
 
   /* Seconds since last full hour */
   const elapsedInHour = now.getMinutes() * 60 + now.getSeconds();

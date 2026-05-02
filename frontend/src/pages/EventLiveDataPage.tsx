@@ -9,12 +9,18 @@ import {
   formatTotalDuration,
 } from '../utils/duration';
 import { displayName } from '../utils/displayName';
+import { getCustomization } from '../utils/runnerCustomization';
 import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
 
 const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
+
+function effectiveStatus(row: LiveTimingRow): string {
+  const custom = getCustomization(row.name);
+  return custom?.statusOverride || row.status;
+}
 
 export default function EventLiveDataPage() {
   const { id } = useParams<{ id: string }>();
@@ -70,7 +76,7 @@ export default function EventLiveDataPage() {
       (acc, r) => acc + sumDurations(r.all_laps),
       0,
     );
-    const active = rows.filter((r) => r.status.toLowerCase() === 'running').length;
+    const active = rows.filter((r) => effectiveStatus(r).toLowerCase() === 'running').length;
     return { totalKm: km, totalRuntime: runtime, activeRunners: active };
   }, [rows]);
 
@@ -195,8 +201,8 @@ export default function EventLiveDataPage() {
                 {formatDuration(r.min_laptime)}
               </td>
               <td>
-                <span className={`status-badge status-${r.status.toLowerCase()}`}>
-                  {r.status}
+                <span className={`status-badge status-${effectiveStatus(r).toLowerCase()}`}>
+                  {effectiveStatus(r)}
                 </span>
               </td>
             </tr>
