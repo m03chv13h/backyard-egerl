@@ -196,10 +196,13 @@ export default function EventMapPage() {
     fetchData();
   };
 
-  /* Compute runner positions */
+  /* Compute runner positions – exclude runners whose effective status is DNF */
   const runnerPositions = useMemo(() => {
     return rows
       .map((row, idx) => {
+        const custom = getCustomization(row.name);
+        const status = custom?.statusOverride || row.status;
+        if (status.toLowerCase() === 'dnf') return null;
         const pos = estimateRunnerPosition(row, now);
         if (!pos) return null;
         return { row, pos, idx };
