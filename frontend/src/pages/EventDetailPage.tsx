@@ -15,6 +15,7 @@ import {
   formatTotalDuration,
 } from '../utils/duration';
 import { displayName } from '../utils/displayName';
+import { getEffectiveStatus } from '../utils/runnerCustomization';
 import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
@@ -191,7 +192,10 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
       (acc, r) => acc + sumDurations(r.all_laps),
       0,
     );
-    const active = rows.filter((r) => r.status.toLowerCase() === 'running').length;
+    const active = rows.filter((r) => {
+      const status = getEffectiveStatus(r.name, r.status);
+      return status.toLowerCase() === 'running';
+    }).length;
     return { totalKm: km, totalRuntime: runtime, activeRunners: active };
   }, [rows]);
 
@@ -266,7 +270,9 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
           </tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
+          {rows.map((r) => {
+            const status = getEffectiveStatus(r.name, r.status);
+            return (
             <tr key={r.rank}>
               <td className="rank">{r.rank}</td>
               <td>{displayName(r.name)}</td>
@@ -289,12 +295,13 @@ function LiveTimingSection({ eventId }: { eventId: number }) {
                 {formatDuration(r.min_laptime)}
               </td>
               <td>
-                <span className={`status-badge status-${r.status.toLowerCase()}`}>
-                  {r.status}
+                <span className={`status-badge status-${status.toLowerCase()}`}>
+                  {status}
                 </span>
               </td>
             </tr>
-          ))}
+            );
+          })}
           {rows.length === 0 && (
             <tr>
               <td colSpan={9} className="muted">
