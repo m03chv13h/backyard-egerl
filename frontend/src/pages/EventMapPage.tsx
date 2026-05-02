@@ -219,6 +219,9 @@ export default function EventMapPage() {
           <p className="meta">Event #{eventId}</p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <Link to={`/events/${eventId}/runners`} className="btn btn-sm">
+            😀 Runners
+          </Link>
           <Link to={`/events/${eventId}/live_data`} className="btn btn-sm">
             ← Live Data
           </Link>
