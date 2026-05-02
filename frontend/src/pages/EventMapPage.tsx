@@ -14,7 +14,7 @@ import type { LiveTimingRow } from '../types/api';
 import { ROUTE_POINTS, ROUTE_DURATION_S } from '../data/routeData';
 import { sumDurations } from '../utils/duration';
 import { displayName } from '../utils/displayName';
-import { getCustomization } from '../utils/runnerCustomization';
+import { getEffectiveStatus } from '../utils/runnerCustomization';
 
 /* ── helpers ── */
 
@@ -73,7 +73,7 @@ function estimateRunnerPosition(
   row: LiveTimingRow,
   now: Date,
 ): [number, number] | null {
-  const status = getCustomization(row.name)?.statusOverride || row.status;
+  const status = getEffectiveStatus(row.name, row.status);
   if (status.toUpperCase() === 'DNF') return null;
 
   /* Seconds since last full hour */
@@ -200,8 +200,7 @@ export default function EventMapPage() {
   const runnerPositions = useMemo(() => {
     return rows
       .map((row, idx) => {
-        const custom = getCustomization(row.name);
-        const status = custom?.statusOverride || row.status;
+        const status = getEffectiveStatus(row.name, row.status);
         if (status.toLowerCase() === 'dnf') return null;
         const pos = estimateRunnerPosition(row, now);
         if (!pos) return null;

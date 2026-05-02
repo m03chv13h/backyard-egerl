@@ -26,6 +26,15 @@ export function getCustomization(name: string): RunnerCustomization | undefined 
   return loadCustomizations()[name];
 }
 
+/**
+ * Returns the effective status for a runner, taking status overrides into account.
+ * Falls back to the original API status when no override is set.
+ */
+export function getEffectiveStatus(name: string, apiStatus: string): string {
+  const custom = getCustomization(name);
+  return custom?.statusOverride || apiStatus;
+}
+
 export function setCustomization(
   name: string,
   custom: RunnerCustomization,

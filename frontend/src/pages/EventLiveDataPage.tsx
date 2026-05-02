@@ -9,7 +9,7 @@ import {
   formatTotalDuration,
 } from '../utils/duration';
 import { displayName } from '../utils/displayName';
-import { getCustomization } from '../utils/runnerCustomization';
+import { getEffectiveStatus } from '../utils/runnerCustomization';
 import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
@@ -18,8 +18,7 @@ const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
 
 function effectiveStatus(row: LiveTimingRow): string {
-  const custom = getCustomization(row.name);
-  return custom?.statusOverride || row.status;
+  return getEffectiveStatus(row.name, row.status);
 }
 
 export default function EventLiveDataPage() {
