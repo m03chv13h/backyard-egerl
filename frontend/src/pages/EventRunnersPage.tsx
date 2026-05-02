@@ -38,7 +38,7 @@ export default function EventRunnersPage() {
 
   const updateField = (
     name: string,
-    field: 'emoji' | 'nameOverride',
+    field: 'emoji' | 'nameOverride' | 'statusOverride',
     value: string,
   ) => {
     setCustoms((prev) => {
@@ -64,7 +64,7 @@ export default function EventRunnersPage() {
     // Remove entries with no customisation
     const cleaned: RunnerCustomizations = {};
     for (const [key, val] of Object.entries(customs)) {
-      if (val.emoji || val.nameOverride) {
+      if (val.emoji || val.nameOverride || val.statusOverride) {
         cleaned[key] = val;
       }
     }
@@ -101,8 +101,9 @@ export default function EventRunnersPage() {
       </div>
 
       <p className="muted" style={{ marginBottom: '1rem' }}>
-        Assign emojis and optional display-name overrides. Changes are saved
-        locally in your browser and shown in Live&nbsp;Data and Map views.
+        Assign emojis, optional display-name overrides, and status overrides.
+        Changes are saved locally in your browser and shown in
+        Live&nbsp;Data and Map views.
       </p>
 
       {rows.length === 0 && (
@@ -119,6 +120,7 @@ export default function EventRunnersPage() {
                 <th>Original Name</th>
                 <th>Emoji</th>
                 <th>Name Override</th>
+                <th>Status Override</th>
                 <th>Preview</th>
               </tr>
             </thead>
@@ -181,6 +183,32 @@ export default function EventRunnersPage() {
                           updateField(r.name, 'nameOverride', e.target.value)
                         }
                       />
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.25rem' }}>
+                        {['', 'Running', 'DNF'].map((opt) => (
+                          <button
+                            key={opt}
+                            type="button"
+                            className={`btn btn-sm${
+                              (c.statusOverride ?? '') === opt ? ' btn-primary' : ''
+                            }`}
+                            onClick={() =>
+                              updateField(r.name, 'statusOverride', opt)
+                            }
+                          >
+                            {opt || 'API'}
+                          </button>
+                        ))}
+                      </div>
+                      {(c.statusOverride ?? '') !== '' && (
+                        <span
+                          className="muted"
+                          style={{ fontSize: '0.75em', marginTop: '0.25rem', display: 'block' }}
+                        >
+                          Overriding API status to {c.statusOverride}
+                        </span>
+                      )}
                     </td>
                     <td style={{ fontWeight: 700, whiteSpace: 'nowrap' }}>
                       {preview(r.name)}

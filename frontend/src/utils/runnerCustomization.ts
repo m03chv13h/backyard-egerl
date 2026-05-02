@@ -3,6 +3,7 @@ const STORAGE_KEY = 'runner_customizations';
 export interface RunnerCustomization {
   emoji: string;
   nameOverride: string;
+  statusOverride?: string;
 }
 
 export type RunnerCustomizations = Record<string, RunnerCustomization>;
@@ -30,7 +31,7 @@ export function setCustomization(
   custom: RunnerCustomization,
 ): void {
   const all = loadCustomizations();
-  if (!custom.emoji && !custom.nameOverride) {
+  if (!custom.emoji && !custom.nameOverride && !custom.statusOverride) {
     delete all[name];
   } else {
     all[name] = custom;
