@@ -14,7 +14,7 @@ import { LapTimeChart } from '../components/LapTimeChart';
 
 const KM_PER_LAP = 6.7;
 
-const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
+const INTERVAL_OPTIONS = [0.1, 1, 5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
 
 function effectiveStatus(row: LiveTimingRow): string {
