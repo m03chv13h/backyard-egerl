@@ -141,7 +141,7 @@ const startIcon = L.divIcon({
 });
 
 /* ── constants ── */
-const INTERVAL_OPTIONS = [5, 10, 15, 30, 60];
+const INTERVAL_OPTIONS = [0.1, 1, 5, 10, 15, 30, 60];
 const DEFAULT_INTERVAL = 10;
 
 /* ══════════════════════════════════════════════════════ */
